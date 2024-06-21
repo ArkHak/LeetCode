@@ -47,3 +47,65 @@ package Easy
  * s contains only the characters ('I', 'V', 'X', 'L', 'C', 'D', 'M').
  * It is guaranteed that s is a valid roman numeral in the range [1, 3999].
  */
+fun main() {
+    val test1 = "MCMXCIV"
+    val answer = Solution13::romanToInt.invoke(Solution13(), test1)
+
+    println(answer)
+}
+
+
+private class Solution13 {
+    fun romanToInt(s: String): Int {
+        var workS = s
+        var total = 0
+
+        val romanHashMap = hashMapOf(
+            'I' to 1,
+            'V' to 5,
+            'X' to 10,
+            'L' to 50,
+            'C' to 100,
+            'D' to 500,
+            'M' to 1000
+        )
+
+        workS = workS.replace("IV", "IIII")
+        workS = workS.replace("IX", "VIIII")
+        workS = workS.replace("XL", "XXXX")
+        workS = workS.replace("XC", "LXXXX")
+        workS = workS.replace("CD", "CCCC")
+        workS = workS.replace("CM", "DCCCC")
+
+        workS.forEach { symbol ->
+            total += romanHashMap[symbol] ?: 0
+        }
+
+        return total
+    }
+}
+
+private class Solution133 {
+    fun romanToInt(s: String): Int {
+        val romanMap = mapOf(
+            'I' to 1,
+            'V' to 5,
+            'X' to 10,
+            'L' to 50,
+            'C' to 100,
+            'D' to 500,
+            'M' to 1000
+        )
+        var result = 0
+        var prev = 0
+        for (c in s) {
+            val current = romanMap[c] ?: 0
+            result += current
+            if (current > prev && prev in listOf(1, 10, 100)) {
+                result -= 2 * prev
+            }
+            prev = current
+        }
+        return result
+    }
+}
